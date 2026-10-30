@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#2f7d43">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Blocópolis: construa sua cidade em 3D, bloco a bloco, no celular ou no computador. Sem contas, sem energia, sem água, sem problemas — tudo livre!">
+  <title>Blocópolis</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="view"></canvas>
+
+  <!-- Interface da cidade -->
+  <div id="hud" class="hidden">
+    <header id="topbar">
+      <div id="cityInfo">
+        <div id="cityName">Blocópolis</div>
+        <div id="cityTitle">Povoado</div>
+      </div>
+      <div id="stats">
+        <span title="Moradores">👥 <b id="statPop">0</b></span>
+        <span title="Vagas de trabalho">💼 <b id="statJobs">0</b></span>
+        <span title="Construções">🏠 <b id="statCount">0</b></span>
+      </div>
+      <div id="topButtons">
+        <button id="btnSpeed" class="chip" title="Velocidade (Espaço pausa)">▶ 1x</button>
+        <button id="btnDay" class="chip" title="Dia e noite">🔄</button>
+        <button id="btnMenu" class="chip" title="Menu">☰</button>
+      </div>
+    </header>
+    <div id="toolPanel" class="hidden"></div>
+    <nav id="toolbar"></nav>
+  </div>
+
+  <!-- Interface do modo explorar -->
+  <div id="fpHud" class="hidden">
+    <div id="fpTouch"></div>
+    <div id="crosshair"></div>
+    <button id="btnExitFp" class="chip">🏙️ Voltar à cidade</button>
+    <div id="joystick" class="hidden"><div id="joyKnob"></div></div>
+    <div id="fpButtons">
+      <button class="fpb" data-fp="fly" title="Voar">🕊️</button>
+      <button class="fpb" data-fp="down" title="Descer">⬇️</button>
+      <button class="fpb" data-fp="jump" title="Pular / subir">⬆️</button>
+      <button class="fpb lg" data-fp="break" title="Quebrar">⛏️</button>
+      <button class="fpb lg" data-fp="place" title="Colocar">🧱</button>
+    </div>
+    <div id="hotbar"></div>
+    <div id="lockPrompt" class="hidden">
+      <div class="card small">
+        <h2>🚶 Modo Explorar</h2>
+        <p>Clique para controlar a câmera com o mouse.</p>
+        <p class="keys"><b>WASD</b> andar · <b>Espaço</b> pular (2x = voar) · <b>Shift</b> descer<br>
+          <b>Clique esq.</b> quebrar · <b>Clique dir.</b> colocar · <b>1–9</b> / roda escolhe bloco<br>
+          <b>E</b> todos os blocos · <b>F</b> voar · <b>C</b> volta à cidade · <b>Esc</b> solta o mouse</p>
+        <button class="big" id="btnLock">Jogar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <!-- Tela inicial -->
+  <div id="startScreen" class="screen">
+    <div class="card">
+      <h1 class="logo"><span>B</span><span>L</span><span>O</span><span>C</span><span>Ó</span><span>P</span><span>O</span><span>L</span><span>I</span><span>S</span></h1>
+      <p class="tagline">Construa sua cidade em 3D, bloco a bloco.<br><b>Sem contas, sem energia, sem água, sem reclamações — tudo livre!</b></p>
+      <div id="startMain" class="stack">
+        <button id="btnContinue" class="big hidden">▶ Continuar cidade</button>
+        <button id="btnNewWorld" class="big">🆕 Nova cidade</button>
+        <button id="btnImport" class="big secondary">📂 Abrir arquivo de cidade</button>
+        <button id="btnHelpStart" class="big secondary">❓ Como jogar</button>
+      </div>
+      <form id="newWorldForm" class="stack hidden" autocomplete="off">
+        <label class="field">Nome da cidade
+          <input id="inName" maxlength="24" value="Blocópolis">
+        </label>
+        <div class="field">Terreno
+          <div class="seg" id="segTerrain">
+            <button type="button" data-v="planicie" class="on">🌾 Planície</button>
+            <button type="button" data-v="colinas">⛰️ Colinas</button>
+            <button type="button" data-v="ilhas">🏝️ Ilhas</button>
+            <button type="button" data-v="plano">⬜ Plano</button>
+          </div>
+        </div>
+        <div class="field">Tamanho
+          <div class="seg" id="segSize">
+            <button type="button" data-v="pequeno">Pequeno</button>
+            <button type="button" data-v="medio" class="on">Médio</button>
+            <button type="button" data-v="grande">Grande</button>
+          </div>
+        </div>
+        <label class="field">Semente do mapa (opcional)
+          <input id="inSeed" maxlength="20" placeholder="deixe vazio para um mapa surpresa">
+        </label>
+        <div class="row">
+          <button type="button" id="btnBack" class="secondary">Voltar</button>
+          <button type="submit" class="big">Começar!</button>
+        </div>
+      </form>
+      <p class="foot">Funciona no celular e no computador · salva sozinho no navegador</p>
+    </div>
+  </div>
+
+  <div id="loading" class="screen hidden">
+    <div class="card small"><h2>Gerando o mundo…</h2><div class="spinner"></div></div>
+  </div>
+
+  <!-- Menu -->
+  <div id="menu" class="screen hidden">
+    <div class="card">
+      <h2>☰ Menu</h2>
+      <div class="stack">
+        <button id="mSave" class="big">💾 Salvar agora</button>
+        <button id="mRename" class="secondary">✏️ Renomear cidade</button>
+        <button id="mExport" class="secondary">📤 Baixar arquivo da cidade</button>
+        <button id="mImport" class="secondary">📂 Abrir arquivo de cidade</button>
+        <div class="field">Gráficos
+          <div class="seg" id="segQuality">
+            <button type="button" data-v="baixa">⚡ Leve (celular)</button>
+            <button type="button" data-v="alta">✨ Bonito (sombras)</button>
+          </div>
+        </div>
+        <button id="mHelp" class="secondary">❓ Como jogar</button>
+        <button id="mNew" class="secondary">🆕 Nova cidade</button>
+        <button id="mClose" class="big">Voltar ao jogo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paleta completa de blocos -->
+  <div id="paletteOverlay" class="screen hidden">
+    <div class="card wide">
+      <h2>🧱 Escolha um bloco</h2>
+      <div id="paletteBig" class="palette"></div>
+      <button id="paletteClose" class="big">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Ajuda -->
+  <div id="help" class="screen hidden">
+    <div class="card wide">
+      <h2>❓ Como jogar</h2>
+      <div class="help-cols">
+        <section>
+          <h3>🏙️ Construindo a cidade</h3>
+          <ol>
+            <li><b>🛣️ Estrada:</b> arraste para desenhar ruas retas.</li>
+            <li><b>🏠 🏬 🏭 Zonas:</b> pinte áreas ao lado das ruas. Casas, lojas e fábricas <b>nascem sozinhas</b> e crescem com o tempo até virarem prédios e arranha-céus.</li>
+            <li><b>🌳 Especiais:</b> parques, praças, prefeitura, igreja, estádio, torre de TV e farol. Perto deles a cidade cresce mais rápido.</li>
+            <li><b>🧱 Blocos:</b> coloque e quebre blocos como num jogo de mineração.</li>
+            <li><b>⛰️ Terreno:</b> eleve, rebaixe ou nivele o chão. Cave abaixo do mar para fazer lagos.</li>
+            <li><b>🚶 Explorar:</b> ande pela sua cidade em primeira pessoa, voe e construa por dentro!</li>
+          </ol>
+          <p>Aqui não existe dinheiro, energia, água, lixo nem reclamações. É só construir. 😄</p>
+        </section>
+        <section>
+          <h3>📱 No celular</h3>
+          <ul>
+            <li><b>1 dedo:</b> usa a ferramenta (ou move o mapa no ✋)</li>
+            <li><b>2 dedos:</b> move, gira e dá zoom</li>
+            <li>Toque num prédio com ✋ para ver detalhes</li>
+            <li>Explorar: joystick à esquerda, arraste à direita para olhar</li>
+          </ul>
+          <h3>🖱️ No computador</h3>
+          <ul>
+            <li><b>Botão esquerdo:</b> ferramenta · <b>direito:</b> gira · <b>roda:</b> zoom</li>
+            <li><b>WASD/setas:</b> move · <b>Q/E:</b> gira · <b>T/G:</b> inclina</li>
+            <li><b>1–9, 0:</b> ferramentas · <b>Espaço:</b> pausa · <b>R:</b> gira especial</li>
+            <li>No modo Blocos: esquerdo coloca, direito quebra</li>
+          </ul>
+        </section>
+      </div>
+      <button id="helpClose" class="big">Entendi!</button>
+    </div>
+  </div>
+
+  <div id="fatal" class="screen hidden">
+    <div class="card small"><h2>😕 Ops!</h2><p></p></div>
+  </div>
+
+  <script src="lib/three.min.js"></script>
+  <script src="js/noise.js"></script>
+  <script src="js/blocks.js"></script>
+  <script src="js/structures.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/save.js"></script>
+  <script src="js/city.js"></script>
+  <script src="js/life.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol === 'https:') {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>

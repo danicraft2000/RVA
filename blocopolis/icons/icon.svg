@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fb0ea"/>
+      <stop offset="1" stop-color="#a9dcf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#sky)"/>
+  <!-- bloco de grama -->
+  <polygon points="256,236 436,326 256,416 76,326" fill="#5fa83c"/>
+  <polygon points="76,326 256,416 256,486 76,396" fill="#8a6142"/>
+  <polygon points="436,326 256,416 256,486 436,396" fill="#6d4b33"/>
+  <polygon points="76,326 256,416 256,432 76,342" fill="#4f9232"/>
+  <polygon points="436,326 256,416 256,432 436,342" fill="#3f7c27"/>
+  <!-- prédio alto -->
+  <polygon points="250,120 310,150 310,330 250,300" fill="#3f86c6"/>
+  <polygon points="310,150 350,130 350,310 310,330" fill="#2c6aa3"/>
+  <polygon points="250,120 290,100 350,130 310,150" fill="#8fc7ee"/>
+  <g fill="#ffe08a">
+    <polygon points="262,150 274,156 274,170 262,164"/>
+    <polygon points="286,162 298,168 298,182 286,176"/>
+    <polygon points="262,186 274,192 274,206 262,200"/>
+    <polygon points="286,198 298,204 298,218 286,212"/>
+    <polygon points="262,222 274,228 274,242 262,236"/>
+    <polygon points="286,234 298,240 298,254 286,248"/>
+    <polygon points="262,258 274,264 274,278 262,272"/>
+  </g>
+  <!-- casinha -->
+  <polygon points="150,276 200,301 200,356 150,331" fill="#f2efe6"/>
+  <polygon points="200,301 236,283 236,338 200,356" fill="#d9d4c6"/>
+  <polygon points="140,272 186,236 210,298 160,320" fill="#c9452c"/>
+  <polygon points="186,236 246,266 236,286 210,298" fill="#a83620"/>
+  <polygon points="168,322 180,328 180,350 168,344" fill="#7a5130"/>
+  <!-- árvore -->
+  <polygon points="372,300 380,304 380,344 372,340" fill="#6b4a2c"/>
+  <polygon points="352,262 384,246 408,258 408,292 376,308 352,296" fill="#3d8a32"/>
+  <polygon points="352,262 384,278 408,258 384,246" fill="#58aa45"/>
+</svg>

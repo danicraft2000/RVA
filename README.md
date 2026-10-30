@@ -2,6 +2,10 @@
 
 Este projeto recria o site da Rede Vanguarda, emissora regional do Vale do Paraíba, São Paulo, baseado no design original de 20 de setembro de 2003 às 20:00:58, capturado do Wayback Machine.
 
+## 🎮 Jogo: Blocópolis
+
+Na pasta [`blocopolis/`](blocopolis/) está o **Blocópolis**, um jogo 3D para celular e computador que mistura mundo de blocos com construtor de cidades. Não tem problemas de cidadãos nem de energia ou água: tudo é livre. Veja como jogar em [`blocopolis/README.md`](blocopolis/README.md).
+
 ## 🎯 Características do Site
 
 ### Design Remasterizado
