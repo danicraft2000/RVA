@@ -131,3 +131,14 @@ Preservar e modernizar a memória digital da emissora regional, mantendo a auten
 
 **Rede Vanguarda - Vale do Paraíba, São Paulo**  
 *Emissora Regional do Vale do Paraíba* 
+---
+
+## 🎬 Vinhetas RVA (Remaking Vintage Archives)
+
+Remakes programados das vinhetas da Rede Vanguarda — cada vinheta é uma produção
+independente, animada por código (Three.js + Motion), renderizada quadro a quadro
+e codificada com FFmpeg, com trilha original.
+
+| Vinheta | Pasta | Entrega |
+|---|---|---|
+| VANGUARDA NEWS | [`vinhetas/vanguarda-news/`](vinhetas/vanguarda-news/) | MP4 3840×2160, 30 fps, 10,5 s |

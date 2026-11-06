@@ -1,0 +1,9 @@
+node_modules/
+dist/
+output/preview/
+output/mezzanine/
+output/anchors_*.json
+output/preview_*.mp4
+# Fontes comerciais (ITC Avant Garde Std): não versionar — coloque-as em assets/fonts/ localmente
+assets/fonts/*.ttf
+assets/fonts/*.otf
