@@ -46,6 +46,7 @@ async function encodeDelivery() {
     '-vf', 'scale=out_color_matrix=bt709:out_range=tv,format=yuv420p',
     '-c:v', 'libx264', '-preset', args.preset || 'slow', '-crf', String(args.crf || 16), '-profile:v', 'high', '-level:v', '5.1',
     '-x264-params', 'keyint=30:min-keyint=1:aq-mode=3:aq-strength=0.9:deblock=-1,-1',
+    '-bsf:v', 'h264_metadata=sample_aspect_ratio=1/1',
     '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv',
     '-c:a', 'aac', '-b:a', '320k', '-ar', '48000', '-r', '30',
     '-movflags', '+faststart', '-metadata', 'title=VANGUARDA NEWS — RVA Remake',

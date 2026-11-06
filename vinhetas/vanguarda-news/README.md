@@ -45,6 +45,22 @@ tela 21,8°; desvio de perspectiva **0,26 % RMS** (máx. 0,66 %) da diagonal da 
 ou seja, sem distorção, esticamento ou compressão; logo centralizada (≈ 51 % × 50 %),
 ocupando ~50 % da largura e ~70 % da altura do quadro.
 
+## Controle de qualidade (render final)
+
+| Verificação | Resultado |
+|---|---|
+| Arquivo | 3840×2160, SAR 1:1 / DAR 16:9, H.264 High@5.1, 30/1 fps, **315 quadros**, ~40 Mb/s, 52,6 MB |
+| Duração | vídeo 10,500 s e áudio 10,500 s, ambos iniciando em 0,000 s |
+| Decodificação integral | sem erros (`ffmpeg -v error -f null`) |
+| Tela preta | nenhum quadro abaixo de luminância 4 (mín. 6,0 no 1º quadro, abertura em fade) |
+| Quadros congelados | nenhum; os últimos quadros seguem em movimento (push-in, neon, poeira) |
+| Saltos/pops | um único pico, no quadro 240 = **flash do impacto em 8,000 s** (intencional) |
+| Sincronia | 8 travamentos de letras, bumbos e impacto final dentro de **±2,5 ms** do ataque no áudio |
+| Proporções da logo | rotação 21,8° (ref. 21,88°), distorção 0,26 % RMS / 0,66 % máx., centro (51 %, 50 %) |
+| Áudio | −14,0 LUFS integrados, pico −0,9 dBFS |
+
+![Folha de contato](output/contact_sheet.jpg)
+
 ## Estrutura
 
 ```
@@ -72,7 +88,9 @@ vinhetas/vanguarda-news/
 │   ├── cues.json            # mapa de sincronia gerado pela trilha
 │   ├── audio/vanguarda-news-theme.wav
 │   └── fonts/               # (não versionado) ITC Avant Garde Std Bold/Demi
-└── output/RVA_Vanguarda_News_2160p30.mp4
+└── output/
+    ├── RVA_Vanguarda_News_2160p30.mp4
+    └── contact_sheet.jpg
 ```
 
 ## Como renderizar
